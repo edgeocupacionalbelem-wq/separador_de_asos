@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ title or "ASO Split Pro" }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">AS</div>
+        <div>
+          <div class="brand-title">ASO Split Pro</div>
+          <div class="brand-sub">Separação inteligente de páginas</div>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <a class="side-link {{ 'active' if request.path == '/' else '' }}" href="{{ url_for('index') }}">Novo processamento</a>
+        <div class="side-info">
+          <span>Deploy pronto para Render</span>
+          <small>Python 3.11 + OCR no servidor</small>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

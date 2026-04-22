@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% set title = "Revisão das páginas" %}
+{% block content %}
+<section class="panel">
+  <div class="panel-head">
+    <h2>Revisão das páginas</h2>
+    <p>{{ total }} página(s) encontrada(s). Marque apenas as que você quer separar e revise os campos antes de gerar.</p>
+  </div>
+
+  <form action="{{ url_for('generate') }}" method="post">
+    <div class="toolbar">
+      <button type="button" class="btn btn-light" onclick="toggleAll(true)">Selecionar tudo</button>
+      <button type="button" class="btn btn-light" onclick="toggleAll(false)">Limpar seleção</button>
+      <button type="submit" class="btn btn-primary">Gerar ZIP das páginas marcadas</button>
+    </div>
+
+    <div class="cards-grid">
+      {% for p in pages %}
+      <article class="page-card">
+        <div class="thumb-wrap">
+          <img src="data:image/png;base64,{{ p.thumb_b64 }}" alt="Página {{ p.page_label }}">
+        </div>
+
+        <div class="page-body">
+          <div class="page-topline">
+            <label class="checkline">
+              <input class="select-box" type="checkbox" name="selected" value="{{ p.id }}">
+              <span>Selecionar</span>
+            </label>
+            <span class="page-tag">{{ p.pdf_name }} • pág. {{ p.page_label }}</span>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              <span>Funcionário</span>
+              <input type="text" name="funcionario__{{ p.id }}" value="{{ p.funcionario }}">
+            </label>
+            <label>
+              <span>Empresa</span>
+              <input type="text" name="empresa__{{ p.id }}" value="{{ p.empresa }}">
+            </label>
+            <label>
+              <span>CNPJ</span>
+              <input type="text" name="cnpj__{{ p.id }}" value="{{ p.cnpj }}">
+            </label>
+            <label class="full">
+              <span>Nome sugerido</span>
+              <input type="text" value="{{ p.filename }}" readonly>
+            </label>
+          </div>
+
+          <div class="status-row">
+            {% if p.cnpj %}
+              {% if p.cnpj_valid %}
+                <span class="pill success">CNPJ válido</span>
+              {% else %}
+                <span class="pill warning">CNPJ encontrado, mas não validado</span>
+              {% endif %}
+            {% else %}
+              <span class="pill muted">Sem CNPJ detectado</span>
+            {% endif %}
+          </div>
+
+          <details class="ocr-box">
+            <summary>Ver texto lido da página</summary>
+            <pre>{{ p.ocr_text }}</pre>
+          </details>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </form>
+</section>
+
+<script>
+function toggleAll(checked) {
+  document.querySelectorAll('.select-box').forEach(el => el.checked = checked);
+}
+</script>
+{% endblock %}

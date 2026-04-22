@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% set title = "ASO Split Pro" %}
+{% block content %}
+<section class="hero-card">
+  <div>
+    <span class="eyebrow">Fluxo ideal para clínica e separação por revisão</span>
+    <h1>Envie os PDFs e revise o nome sugerido de cada página.</h1>
+    <p>O sistema tenta ler automaticamente <strong>Funcionário</strong>, <strong>Empresa</strong> e <strong>CNPJ</strong> da página marcada e gera um ZIP com um PDF por página selecionada.</p>
+  </div>
+  <div class="hero-metrics">
+    <div class="metric">
+      <span>Formato</span>
+      <strong>FUNCIONÁRIO - EMPRESA + CNPJ</strong>
+    </div>
+    <div class="metric">
+      <span>Compatibilidade</span>
+      <strong>ASO normal, audiometria, espirometria e acuidade</strong>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Enviar PDFs</h2>
+    <p>Você pode mandar um ou vários arquivos de uma vez.</p>
+  </div>
+
+  <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-form">
+    <label class="dropzone" for="pdfs">
+      <input id="pdfs" type="file" name="pdfs" multiple accept=".pdf,application/pdf" required>
+      <div class="dropzone-title">Clique para escolher os arquivos</div>
+      <div class="dropzone-sub">Somente PDF • múltiplos arquivos permitidos</div>
+    </label>
+    <button class="btn btn-primary" type="submit">Ler páginas e montar revisão</button>
+  </form>
+</section>
+
+<section class="panel grid-two">
+  <div class="info-card">
+    <h3>Como a leitura funciona</h3>
+    <ul>
+      <li><strong>ASO normal:</strong> busca a empresa a partir de <code>Empresa:</code> e ignora <code>DADOS DA EMPRESA / COLABORADOR</code>.</li>
+      <li><strong>Funcionário:</strong> tenta ler de <code>Funcionário:</code> ou <code>Nome:</code>.</li>
+      <li><strong>CNPJ:</strong> detecta e formata automaticamente quando houver 14 dígitos.</li>
+    </ul>
+  </div>
+  <div class="info-card">
+    <h3>Saída do sistema</h3>
+    <ul>
+      <li>Você escolhe só as páginas desejadas.</li>
+      <li>Cada página selecionada vira um PDF próprio.</li>
+      <li>O download final vem em um único ZIP.</li>
+    </ul>
+  </div>
+</section>
+{% endblock %}
